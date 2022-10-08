@@ -45,7 +45,7 @@ setup(
     license='BSD',
     maintainer='Suveer Garg',
     maintainer_email='suveer.garg@samsung.com',
-    url='https://github.com/gsuveer/octomap-python',
+    url='https://github.com/colinator/octomap-python',
     ext_modules=ext_modules,
     cmdclass={'build_ext': build_ext},
 )
