@@ -567,13 +567,14 @@ cdef class SemanticOcTree:
                 empty.append(points)
 
         cdef np.ndarray[DOUBLE_t, ndim=2] occupied_arr
+        cdef np.ndarray[DOUBLE_t, ndim=2] empty_arr
+
         if len(occupied) == 0:
             occupied_arr = np.zeros((0, 5), dtype=np.float64)
         else:
             occupied_arr = np.concatenate(occupied, axis=0)
             
         if include_empty:
-            cdef np.ndarray[DOUBLE_t, ndim=2] empty_arr
             if len(empty) == 0:
                 empty_arr = np.zeros((0, 3), dtype=np.float64)
             else:
