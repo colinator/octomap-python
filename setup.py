@@ -13,7 +13,7 @@ from Cython.Distutils import build_ext
 import numpy
 
 os.makedirs('src/octomap/build', exist_ok=True)
-subprocess.run(['cmake', ".."], cwd='src/octomap/build', check=True)
+subprocess.run(['cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-O3 -Wall -Wextra"', ".."], cwd='src/octomap/build', check=True)
 subprocess.run(['make'], cwd='src/octomap/build', check=True)
 
 ext_modules = [
