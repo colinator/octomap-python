@@ -520,7 +520,7 @@ cdef class SemanticOcTree:
                 pass
         return labels
 
-    def extractPointCloud(self):
+    def extractPointCloud(self, include_empty=True):
         cdef float resolution = self.getResolution()
 
         cdef list occupied = []
@@ -539,6 +539,8 @@ cdef class SemanticOcTree:
         cdef int id
         for it in self.begin_leafs():
             is_occupied = self.isNodeOccupied(it)
+            if not include_empty and not is_occupied:
+                continue
             size = it.getSize()
             center = it.getCoordinate()
             category = it.getCategory()
@@ -565,16 +567,20 @@ cdef class SemanticOcTree:
                 empty.append(points)
 
         cdef np.ndarray[DOUBLE_t, ndim=2] occupied_arr
-        cdef np.ndarray[DOUBLE_t, ndim=2] empty_arr
         if len(occupied) == 0:
             occupied_arr = np.zeros((0, 5), dtype=np.float64)
         else:
             occupied_arr = np.concatenate(occupied, axis=0)
-        if len(empty) == 0:
-            empty_arr = np.zeros((0, 3), dtype=np.float64)
+            
+        if include_empty:
+            cdef np.ndarray[DOUBLE_t, ndim=2] empty_arr
+            if len(empty) == 0:
+                empty_arr = np.zeros((0, 3), dtype=np.float64)
+            else:
+                empty_arr = np.concatenate(empty, axis=0)
+            return occupied_arr, empty_arr
         else:
-            empty_arr = np.concatenate(empty, axis=0)
-        return occupied_arr, empty_arr
+            return occupied_arr
 
     def insertPointCloud(self,
                          np.ndarray[DOUBLE_t, ndim=2] pointcloud,
